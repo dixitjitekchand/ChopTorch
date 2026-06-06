@@ -271,4 +271,25 @@
             android:paddingBottom="24dp" />
 
     </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:padding="10dp"
+    android:layout_gravity="bottom">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/your_photo"
+        android:layout_marginEnd="6dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Developed by Shyamji Dixit"
+        android:textSize="12sp"/>
+    </LinearLayout>
 </ScrollView>
