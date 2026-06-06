@@ -289,7 +289,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Developed by Shyamji Dixit"
+        android:text="Developed by Shyamji Dixit | All rights reserved to the Developer"
         android:textSize="12sp"/>
     </LinearLayout>
 </ScrollView>
