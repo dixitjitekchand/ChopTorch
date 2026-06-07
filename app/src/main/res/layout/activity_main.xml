@@ -246,7 +246,7 @@
             android:layout_marginBottom="16dp"
             android:visibility="gone" />
 
-        <!-- How To Use Button -->
+                <!-- How To Use Button -->
         <Button
             android:id="@+id/btnHowTo"
             android:layout_width="match_parent"
@@ -259,25 +259,12 @@
             android:layout_marginBottom="8dp"
             android:stateListAnimator="@null" />
 
-        <!-- Footer -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ChopTorch v1.0 • Works screen-off • API 29+"
-            android:textSize="11sp"
-            android:textColor="@color/text_secondary"
-            android:gravity="center"
-            android:paddingTop="8dp"
-            android:paddingBottom="24dp" />
-
-    </LinearLayout>
-
-    <!-- Developer Section -->
+        <!-- Developer Section -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             app:cardBackgroundColor="@color/card_bg"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp">
@@ -303,8 +290,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="14dp">
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -329,10 +316,23 @@
                         android:textSize="11sp"
                         android:textColor="@color/text_secondary"
                         android:layout_marginTop="2dp" />
+
                 </LinearLayout>
 
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
+
+        <!-- Footer -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ChopTorch v1.0 • Works screen-off • API 29+"
+            android:textSize="11sp"
+            android:textColor="@color/text_secondary"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="24dp" />
 
     </LinearLayout>
 
