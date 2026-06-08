@@ -236,7 +236,7 @@ class ChopTorchService : LifecycleService() {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Flashlight Shake Active")
-            .setContentText("$flashStatus — Double-chop to toggle flashlight")
+            .setContentText("$flashStatus — Shake your wrist twice to toggle flashlight")
             .setSmallIcon(android.R.drawable.ic_menu_camera)
             .setContentIntent(openAppIntent)
             .setOngoing(true)
