@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="HOW TO USE CHOPTORCH"
+            android:text="HOW TO USE Flashlight Shake"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start the ChopTorch service."
+                android:text="Start the Flashlight Shake service."
                 android:textSize="15sp"
                 android:textColor="@color/text_primary" />
         </LinearLayout>
