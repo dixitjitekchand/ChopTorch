@@ -32,27 +32,28 @@ class ChopGestureDetector(
     companion object {
         private const val TAG = "ChopGestureDetector"
 
-        // ── Sensitivity Constants (tune these) ─────────────────────────────
-        // Minimum gyroscope Z angular velocity (rad/s) to start a wrist twist
-        const val DEFAULT_ACCEL_THRESHOLD = 2.5f       // gz entry threshold for twist start
+        // Minimum gyroscope Z angular velocity (rad/s) to start a wrist twist.
+        // Lowered from 2.5 — real wrist twist peaks typically reach 6–12 rad/s,
+        // but entry detection should catch the ramp-up early.
+        const val DEFAULT_ACCEL_THRESHOLD = 2.0f
 
-        // Minimum gz magnitude to confirm twist direction reversal
-        const val DEFAULT_GYRO_THRESHOLD = 2.0f        // rad/s
+        // Minimum gz to confirm reversal. Lowered from 2.0 for same reason.
+        const val DEFAULT_GYRO_THRESHOLD = 1.5f
 
-        // Maximum time (ms) for one full wrist twist
-        const val CHOP_WINDOW_MS = 600L
+        // Window for one full twist (DOWN + reversal + settle). Extended from
+        // 600 ms — deliberate users need up to ~800 ms for a clean twist.
+        const val CHOP_WINDOW_MS = 800L
 
-        // Maximum time (ms) between two wrist twists to count as a "double twist"
+        // Window between two twists to register as double-chop. Unchanged.
         const val DOUBLE_CHOP_WINDOW_MS = 1000L
 
-        // Minimum time (ms) between two full double-twist events (debounce)
+        // Minimum gap between two confirmed double-chop events (debounce).
         const val DEBOUNCE_MS = 800L
 
-        // Low-pass filter alpha for gravity separation
+        // Low-pass alpha for gravity separation on accelerometer.
         const val LOW_PASS_ALPHA = 0.8f
 
-        // Sensor sampling interval (SENSOR_DELAY_GAME = ~20ms, good balance)
-        // Use SENSOR_DELAY_FASTEST for best detection, higher battery drain
+        // SENSOR_DELAY_GAME ≈ 20 ms polling — good balance of latency vs battery.
         val SENSOR_DELAY = SensorManager.SENSOR_DELAY_GAME
     }
 
