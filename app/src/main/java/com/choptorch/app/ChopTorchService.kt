@@ -195,10 +195,10 @@ class ChopTorchService : LifecycleService() {
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "ChopTorch Service",
+            "Flashlight Shake Service",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Keeps ChopTorch running in background"
+            description = "Keeps Flashlight Shake running in background"
             setShowBadge(false)
         }
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -235,7 +235,7 @@ class ChopTorchService : LifecycleService() {
         val toggleLabel = if (isFlashlightOn) "Turn Off" else "Turn On"
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("ChopTorch Active")
+            .setContentTitle("Flashlight Shake Active")
             .setContentText("$flashStatus — Double-chop to toggle flashlight")
             .setSmallIcon(android.R.drawable.ic_menu_camera)
             .setContentIntent(openAppIntent)
