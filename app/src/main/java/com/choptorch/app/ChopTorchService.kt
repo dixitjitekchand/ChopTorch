@@ -33,6 +33,7 @@ class ChopTorchService : LifecycleService() {
         private const val TAG = "ChopTorchService"
 
         const val CHANNEL_ID = "choptorch_channel"
+        const val CHANNEL_ID_SILENT = "choptorch_channel_silent"
         const val NOTIFICATION_ID = 1001
 
         const val ACTION_STOP = "com.choptorch.app.STOP"
@@ -193,16 +194,33 @@ class ChopTorchService : LifecycleService() {
     // ── Notification ───────────────────────────────────────────────────────
 
     private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            "Flashlight Shake Service",
-            NotificationManager.IMPORTANCE_LOW
-        ).apply {
-            description = "Keeps Flashlight Shake running in background"
-            setShowBadge(false)
-        }
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.createNotificationChannel(channel)
+
+        // Active channel — shown when flashlight is ON
+        val activeChannel = NotificationChannel(
+            CHANNEL_ID,
+            "Flashlight Active",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "Shown when flashlight is ON"
+            setShowBadge(true)
+        }
+
+        // Silent channel — shown when service is running but flashlight is OFF
+        val silentChannel = NotificationChannel(
+            CHANNEL_ID_SILENT,
+            "ChopTorch Running",
+            NotificationManager.IMPORTANCE_MIN
+        ).apply {
+            description = "Minimal background indicator"
+            setShowBadge(false)
+            setSound(null, null)
+            enableLights(false)
+            enableVibration(false)
+        }
+
+        nm.createNotificationChannel(activeChannel)
+        nm.createNotificationChannel(silentChannel)
     }
 
     private fun buildNotification(): Notification {
@@ -231,28 +249,47 @@ class ChopTorchService : LifecycleService() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val flashStatus = if (isFlashlightOn) "💡 Light ON" else "🔦 Listening..."
-        val toggleLabel = if (isFlashlightOn) "Turn Off" else "Turn On"
-
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Flashlight Shake Active")
-            .setContentText("$flashStatus — Shake your wrist twice to toggle flashlight")
-            .setSmallIcon(android.R.drawable.ic_menu_camera)
-            .setContentIntent(openAppIntent)
-            .setOngoing(true)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .addAction(
-                android.R.drawable.ic_menu_close_clear_cancel,
-                "Stop",
-                stopIntent
-            )
-            .addAction(
-                android.R.drawable.ic_menu_camera,
-                toggleLabel,
-                toggleFlashIntent
-            )
-            .build()
+        return if (isFlashlightOn) {
+            // Flashlight ON — prominent notification
+            NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("💡 Flashlight is ON")
+                .setContentText("Twist wrist to turn off")
+                .setSmallIcon(android.R.drawable.ic_menu_camera)
+                .setContentIntent(openAppIntent)
+                .setOngoing(true)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .addAction(
+                    android.R.drawable.ic_menu_close_clear_cancel,
+                    "Stop Service",
+                    stopIntent
+                )
+                .addAction(
+                    android.R.drawable.ic_menu_camera,
+                    "Turn Off",
+                    toggleFlashIntent
+                )
+                .build()
+        } else {
+            // Flashlight OFF — silent minimal notification (required by Android)
+            NotificationCompat.Builder(this, CHANNEL_ID_SILENT)
+                .setContentTitle("ChopTorch Active")
+                .setContentText("Twist wrist to turn on flashlight")
+                .setSmallIcon(android.R.drawable.ic_menu_camera)
+                .setContentIntent(openAppIntent)
+                .setOngoing(true)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setSilent(true)
+                .addAction(
+                    android.R.drawable.ic_menu_close_clear_cancel,
+                    "Stop",
+                    stopIntent
+                )
+                .build()
+        }
     }
 
     private fun updateNotification() {
