@@ -307,9 +307,9 @@ class MainActivity : AppCompatActivity() {
             .setMessage(
                 "1. Start the service using the button above.\n\n" +
                 "2. Hold your phone naturally in your hand.\n\n" +
-                "3. Make a quick downward wrist chop motion — like chopping wood.\n\n" +
-                "4. Immediately reverse the motion upward.\n\n" +
-                "5. Repeat the chop within ~1 second.\n\n" +
+                "3. Flick your wrist left-to-right (or right-to-left).\n\n" +
+                "4. Immediately flick back the other direction.\n\n" +
+                "5. Repeat the twist within ~1 second.\n\n" +
                 "6. The flashlight will toggle ON/OFF with a vibration.\n\n" +
                 "Tips:\n" +
                 "• Works with screen OFF\n" +
