@@ -266,53 +266,55 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-<!-- Developer Section — pinned to bottom, 30% smaller -->
+<!-- Developer Section -->
         <androidx.cardview.widget.CardView
-            android:layout_width="220dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="12dp"
             app:cardBackgroundColor="@color/card_bg"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
-            
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="10dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/your_photo"
                     android:scaleType="centerCrop"
                     android:contentDescription="Developer photo"
                     app:shapeAppearanceOverlay="@style/CircleImageStyle"
                     app:strokeColor="@color/accent_blue"
-                    app:strokeWidth="1.5dp" />
+                    app:strokeWidth="2dp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="12dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Developed by"
-                        android:textSize="9sp"
+                        android:textSize="11sp"
                         android:textColor="@color/text_secondary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Shyamji Dixit"
-                        android:textSize="12sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
                         android:layout_marginTop="1dp" />
@@ -320,8 +322,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="All rights reserved"
-                        android:textSize="9sp"
+                        android:text="All rights reserved to the developer"
+                        android:textSize="11sp"
                         android:textColor="@color/text_secondary"
                         android:layout_marginTop="1dp" />
 
@@ -330,7 +332,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
         <!-- Footer -->
         <TextView
             android:layout_width="match_parent"
