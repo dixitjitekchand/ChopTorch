@@ -109,12 +109,16 @@ class ChopGestureDetector(
     }
 
     fun setSensitivity(level: Float) {
-        // level: 0.0 (max sensitive) → 1.0 (min sensitive)
-        // accelThreshold: 1.5 (high sensitivity) → 4.0 (low sensitivity)
-        // gyroThreshold:  1.2 (high sensitivity) → 3.0 (low sensitivity)
-        accelThreshold = 1.5f + (level * 2.5f)
-        gyroThreshold = 1.2f + (level * 1.8f)
-        Log.d(TAG, "Sensitivity updated: accel=$accelThreshold gyro=$gyroThreshold")
+        // level: 0.0 (slider left = High sensitivity) → 1.0 (slider right = Low sensitivity)
+        // At level=0.0 (High): accel=3.0, gyro=1.2  — triggers on gentle twists
+        // At level=0.5 (Med): accel=5.5, gyro=2.45  — triggers on normal twists
+        // At level=1.0 (Low): accel=8.0, gyro=3.7   — requires firm twists only
+        // Previous range was [6,20]/[1.5,6] — lower bound of 6 was already too
+        // high for reliable detection; new range [3,8]/[1.2,3.7] keeps the full
+        // slider useful and puts the default squarely in the reliable zone.
+        accelThreshold = 3.0f + (level * 5.0f)
+        gyroThreshold = 1.2f + (level * 2.5f)
+        Log.d(TAG, "Sensitivity updated: level=$level accel=$accelThreshold gyro=$gyroThreshold")
     }
 
     val hasGyroscope: Boolean get() = gyroscope != null
