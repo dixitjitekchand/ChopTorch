@@ -167,7 +167,7 @@ private fun handleAccelerometer(event: SensorEvent) {
 
             ChopPhase.CHOP_DOWN -> {
                 val elapsed = nowMs - chopPhaseStartMs
-                if (elapsed > CHOP_WINDOW_MS) { resetState(); return }
+                if (elapsed > CHOP_WINDOW_MS) { resetState(clearChopTimestamp = true); return }
 
                 // Wait for reversal: gz crosses zero and exceeds threshold in opposite direction
                 val reversing = (firstTwistSign > 0 && gz <= -gyroThreshold) ||
@@ -180,10 +180,14 @@ private fun handleAccelerometer(event: SensorEvent) {
 
             ChopPhase.CHOP_UP -> {
                 val elapsed = nowMs - chopPhaseStartMs
-                if (elapsed > CHOP_WINDOW_MS) { resetState(); return }
+                if (elapsed > CHOP_WINDOW_MS) { resetState(clearChopTimestamp = true); return }
 
-                // Twist complete when gz settles near zero
-                if (abs(gz) < accelThreshold * 0.4f) {
+                // Twist complete when gz settles below 15% of entry threshold.
+                // Previous multiplier was 0.4 — at accelThreshold=13 that required
+                // gz to drop below 5.2 rad/s, which often never happens cleanly
+                // within the window. 0.15 gives a realistic settle target of ~0.75
+                // at default sensitivity, matching real deceleration curves.
+                if (abs(gz) < accelThreshold * 0.15f) {
                     Log.v(TAG, "TWIST_1 complete at ${elapsed}ms")
                     onSingleChopCompleted(nowMs)
                 }
@@ -217,11 +221,14 @@ private fun handleAccelerometer(event: SensorEvent) {
         }
     }
 
-    private fun resetState() {
+    private fun resetState(clearChopTimestamp: Boolean = false) {
         chopPhase = ChopPhase.IDLE
         chopPhaseStartMs = 0L
         gyroConfirmed = false
         lastGyroMagnitude = 0f
         firstTwistSign = 0
+        // Only clear the inter-chop timestamp when explicitly requested (timeout).
+        // A completed chop must preserve its timestamp for double-chop detection.
+        if (clearChopTimestamp) lastChopCompletedMs = 0L
     }
 }
