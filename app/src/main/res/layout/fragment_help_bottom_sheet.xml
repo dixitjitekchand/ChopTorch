@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Drag handle -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="#FF8A8F9C"
+            android:alpha="0.5" />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="HOW TO USE CHOPTORCH"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Lottie Animation -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieHelp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            app:lottie_rawRes="@raw/gesture_animation"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
+
+        <!-- Step 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="1."
+                android:textSize="15sp"
+                android:textColor="@color/accent_blue"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start the ChopTorch service."
+                android:textSize="15sp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <!-- Step 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="2."
+                android:textSize="15sp"
+                android:textColor="@color/accent_blue"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hold your phone naturally in your hand."
+                android:textSize="15sp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <!-- Step 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="3."
+                android:textSize="15sp"
+                android:textColor="@color/accent_blue"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Twist wrist quickly:"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_primary" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Left → Right → Left"
+                    android:textSize="14sp"
+                    android:textColor="@color/accent_yellow"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OR  Right → Left → Right"
+                    android:textSize="14sp"
+                    android:textColor="@color/accent_yellow"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Step 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="4."
+                android:textSize="15sp"
+                android:textColor="@color/accent_blue"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flashlight will toggle ON / OFF."
+                android:textSize="15sp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <!-- Step 5 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="5."
+                android:textSize="15sp"
+                android:textColor="@color/accent_blue"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Works even when screen is off."
+                android:textSize="15sp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <!-- Got it button -->
+        <Button
+            android:id="@+id/btnGotIt"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Got it!"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/accent_blue"
+            android:layout_marginBottom="8dp"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+</ScrollView>
