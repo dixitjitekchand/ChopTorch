@@ -1,4 +1,4 @@
-name: Build ChopTorch APK
+name: Flashlight Shake APK
 
 on:
   push:
@@ -27,5 +27,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ChopTorch-APK
+          name: FlashlightShake-APK
           path: app/build/outputs/apk/debug/app-debug.apk
