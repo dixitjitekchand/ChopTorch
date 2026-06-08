@@ -151,7 +151,7 @@ class ChopTorchService : LifecycleService() {
         if (newState != null) {
             isFlashlightOn = newState
             vibrate()
-            updateNotification()
+            // No notification update needed — notification content is now state-independent.
             broadcastStatus(true)
         }
     }
@@ -196,107 +196,43 @@ class ChopTorchService : LifecycleService() {
     private fun createNotificationChannel() {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Active channel — shown when flashlight is ON
-        val activeChannel = NotificationChannel(
-            CHANNEL_ID,
-            "Flashlight Active",
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = "Shown when flashlight is ON"
-            setShowBadge(true)
-        }
-
-        // Silent channel — shown when service is running but flashlight is OFF
+        // Single silent channel used for ALL states (ON and OFF).
+        // IMPORTANCE_MIN = no sound, no peek, no badge, collapsed by default.
         val silentChannel = NotificationChannel(
             CHANNEL_ID_SILENT,
             "ChopTorch Running",
             NotificationManager.IMPORTANCE_MIN
         ).apply {
-            description = "Minimal background indicator"
+            description = "Required system indicator"
             setShowBadge(false)
             setSound(null, null)
             enableLights(false)
             enableVibration(false)
+            lockscreenVisibility = Notification.VISIBILITY_SECRET
         }
 
-        nm.createNotificationChannel(activeChannel)
         nm.createNotificationChannel(silentChannel)
+        // Delete the old high-importance channel so it no longer appears in settings.
+        nm.deleteNotificationChannel(CHANNEL_ID)
     }
 
     private fun buildNotification(): Notification {
-        val openAppIntent = PendingIntent.getActivity(
-            this,
-            0,
-            Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val stopIntent = PendingIntent.getBroadcast(
-            this,
-            1,
-            Intent(ServiceControlReceiver.ACTION_STOP_SERVICE).apply {
-                setPackage(packageName)
-            },
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val toggleFlashIntent = PendingIntent.getBroadcast(
-            this,
-            2,
-            Intent(ServiceControlReceiver.ACTION_TOGGLE_FLASHLIGHT).apply {
-                setPackage(packageName)
-            },
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        return if (isFlashlightOn) {
-            // Flashlight ON — prominent notification
-            NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("💡 Flashlight is ON")
-                .setContentText("Twist wrist to turn off")
-                .setSmallIcon(android.R.drawable.ic_menu_camera)
-                .setContentIntent(openAppIntent)
-                .setOngoing(true)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .addAction(
-                    android.R.drawable.ic_menu_close_clear_cancel,
-                    "Stop Service",
-                    stopIntent
-                )
-                .addAction(
-                    android.R.drawable.ic_menu_camera,
-                    "Turn Off",
-                    toggleFlashIntent
-                )
-                .build()
-        } else {
-            // Flashlight OFF — silent minimal notification (required by Android)
-            NotificationCompat.Builder(this, CHANNEL_ID_SILENT)
-                .setContentTitle("ChopTorch Active")
-                .setContentText("Twist wrist to turn on flashlight")
-                .setSmallIcon(android.R.drawable.ic_menu_camera)
-                .setContentIntent(openAppIntent)
-                .setOngoing(true)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                .setSilent(true)
-                .addAction(
-                    android.R.drawable.ic_menu_close_clear_cancel,
-                    "Stop",
-                    stopIntent
-                )
-                .build()
-        }
+        // Mandatory foreground notification required by Android for foreground services.
+        // Configured for maximum invisibility: no sound, no vibration, no badge,
+        // hidden from lock screen, lowest possible priority, no action buttons.
+        return NotificationCompat.Builder(this, CHANNEL_ID_SILENT)
+            .setContentTitle("")
+            .setContentText("")
+            .setSmallIcon(android.R.drawable.ic_menu_camera)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+            .setSilent(true)
+            .setShowWhen(false)
+            .build()
     }
 
-    private fun updateNotification() {
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(NOTIFICATION_ID, buildNotification())
-    }
-
+    // updateNotification() removed — notification is state-independent and never needs updating.
     // ── Local Broadcast ────────────────────────────────────────────────────
 
     private fun broadcastStatus(isRunning: Boolean) {
