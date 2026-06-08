@@ -33,19 +33,19 @@ class ChopGestureDetector(
         private const val TAG = "ChopGestureDetector"
 
         // ── Sensitivity Constants (tune these) ─────────────────────────────
-        // Minimum gyroscope Z angular velocity (rad/s) to start a twist
-        const val DEFAULT_ACCEL_THRESHOLD = 2.5f       // repurposed as gz entry threshold
+        // Minimum gyroscope Z angular velocity (rad/s) to start a wrist twist
+        const val DEFAULT_ACCEL_THRESHOLD = 2.5f       // gz entry threshold for twist start
 
-        // Minimum gz magnitude to confirm direction reversal
+        // Minimum gz magnitude to confirm twist direction reversal
         const val DEFAULT_GYRO_THRESHOLD = 2.0f        // rad/s
 
-        // Maximum time (ms) for one full twist (left→right or right→left)
+        // Maximum time (ms) for one full wrist twist
         const val CHOP_WINDOW_MS = 600L
 
-        // Maximum time (ms) between two twists to count as a "double twist"
+        // Maximum time (ms) between two wrist twists to count as a "double twist"
         const val DOUBLE_CHOP_WINDOW_MS = 1000L
 
-        // Minimum time (ms) between two full double-chop events (debounce)
+        // Minimum time (ms) between two full double-twist events (debounce)
         const val DEBOUNCE_MS = 800L
 
         // Low-pass filter alpha for gravity separation
