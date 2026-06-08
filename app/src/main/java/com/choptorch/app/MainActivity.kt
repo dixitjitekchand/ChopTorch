@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity() {
                 shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
                     AlertDialog.Builder(this)
                         .setTitle("Notification Permission")
-                        .setMessage("ChopTorch needs notification permission to show its status while running in the background.")
+                        .setMessage("Flashlight Shake needs notification permission to show its status while running in the background.")
                         .setPositiveButton("Grant") { _, _ ->
                             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                         }
@@ -219,14 +219,14 @@ class MainActivity : AppCompatActivity() {
                 else -> notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         } else {
-            startChopTorchService()
+            startService()
         }
     }
 
-    private fun startChopTorchService() {
+    private fun startService() {
         val sensitivity = binding.seekbarSensitivity.progress / 100f
-        val intent = Intent(this, ChopTorchService::class.java).apply {
-            putExtra(ChopTorchService.EXTRA_SENSITIVITY, sensitivity)
+        val intent = Intent(this, Service::class.java).apply {
+            putExtra(Service.EXTRA_SENSITIVITY, sensitivity)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -249,9 +249,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun stopChopTorchService() {
-        val intent = Intent(this, ChopTorchService::class.java).apply {
-            action = ChopTorchService.ACTION_STOP
+    private fun stopService() {
+        val intent = Intent(this, Service::class.java).apply {
+            action = Service.ACTION_STOP
         }
         startService(intent)
 
@@ -282,7 +282,7 @@ class MainActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Disable Battery Optimization")
             .setMessage(
-                "To ensure ChopTorch keeps working in the background (especially when the screen is off), " +
+                "To ensure Flashlight Shake keeps working in the background (especially when the screen is off), " +
                 "please disable battery optimization for this app.\n\n" +
                 "Tap OK to open settings."
             )
