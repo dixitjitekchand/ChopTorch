@@ -53,30 +53,30 @@ object BatteryOptimizationHelper {
         val manufacturer = Build.MANUFACTURER.lowercase()
         return when {
             manufacturer.contains("xiaomi") || manufacturer.contains("redmi") || manufacturer.contains("poco") ->
-                "MIUI detected: Go to Settings → Apps → ChopTorch → Battery Saver → No restrictions. " +
+                "MIUI detected: Go to Settings → Apps → Flashlight Shake → Battery Saver → No restrictions. " +
                 "Also disable 'Battery optimization' in Settings → Battery & Performance."
 
             manufacturer.contains("samsung") ->
                 "One UI detected: Go to Settings → Battery → Background usage limits → " +
-                "Never sleeping apps → Add ChopTorch."
+                "Never sleeping apps → Add Flashlight Shake."
 
             manufacturer.contains("huawei") || manufacturer.contains("honor") ->
-                "EMUI detected: Go to Settings → Apps → ChopTorch → Battery → " +
+               "EMUI detected: Go to Settings → Apps → Flashlight Shake → Battery → " +
                 "Allow background activity and disable Power-intensive prompt."
 
             manufacturer.contains("oppo") || manufacturer.contains("realme") || manufacturer.contains("oneplus") ->
-                "ColorOS/OxygenOS detected: Go to Settings → Battery → Battery Optimization → " +
-                "Find ChopTorch → Don't optimize."
+             "ColorOS/OxygenOS detected: Go to Settings → Battery → Battery Optimization → " +
+                "Find Flashlight Shake → Don't optimize."
 
             manufacturer.contains("vivo") ->
                 "FunTouch OS detected: Go to Settings → Battery → Background Power Consumption → " +
-                "Allow ChopTorch to run in background."
+                "Allow Flashlight Shake to run in background."
 
             manufacturer.contains("meizu") ->
-                "Flyme detected: Security Center → Permissions → Background → Enable for ChopTorch."
+                "Flyme detected: Security Center → Permissions → Background → Enable for Flashlight Shake."
 
             manufacturer.contains("asus") ->
-                "ASUS detected: Settings → Battery → Auto-start manager → Enable ChopTorch."
+                "ASUS detected: Settings → Battery → Auto-start manager → Enable Flashlight Shake."
 
             else -> null // Stock Android / Pixel — no extra steps needed
         }
