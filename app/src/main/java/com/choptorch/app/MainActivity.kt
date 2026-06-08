@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
 
         // How it works info button
         binding.btnHowTo.setOnClickListener {
-            showHowToDialog()
+            HelpBottomSheet().show(supportFragmentManager, "help")
         }
     }
 
@@ -301,23 +301,5 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showHowToDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("How to use ChopTorch")
-            .setMessage(
-                "1. Start the service using the button above.\n\n" +
-                "2. Hold your phone naturally in your hand.\n\n" +
-                "3. Flick your wrist left-to-right (or right-to-left).\n\n" +
-                "4. Immediately flick back the other direction.\n\n" +
-                "5. Repeat the twist within ~1 second.\n\n" +
-                "6. The flashlight will toggle ON/OFF with a vibration.\n\n" +
-                "Tips:\n" +
-                "• Works with screen OFF\n" +
-                "• Adjust sensitivity if getting false triggers\n" +
-                "• Disable battery optimization for best performance\n\n" +
-                "Device: ${BatteryOptimizationHelper.getDeviceInfo()}"
-            )
-            .setPositiveButton("Got it", null)
-            .show()
-    }
+    // showHowToDialog replaced by HelpBottomSheet
 }
