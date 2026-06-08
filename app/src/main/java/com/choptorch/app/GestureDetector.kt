@@ -109,9 +109,10 @@ class ChopGestureDetector(
 
     fun setSensitivity(level: Float) {
         // level: 0.0 (max sensitive) → 1.0 (min sensitive)
-        // Maps slider to threshold range [6, 20] for accel, [1.5, 6] for gyro
-        accelThreshold = 6f + (level * 14f)
-        gyroThreshold = 1.5f + (level * 4.5f)
+        // accelThreshold: 1.5 (high sensitivity) → 4.0 (low sensitivity)
+        // gyroThreshold:  1.2 (high sensitivity) → 3.0 (low sensitivity)
+        accelThreshold = 1.5f + (level * 2.5f)
+        gyroThreshold = 1.2f + (level * 1.8f)
         Log.d(TAG, "Sensitivity updated: accel=$accelThreshold gyro=$gyroThreshold")
     }
 
@@ -132,25 +133,8 @@ class ChopGestureDetector(
 
     // ── Private sensor handlers ───────────────────────────────────────────────
 
-    private fun handleAccelerometer(event: SensorEvent) {
-        val ax = event.values[0]
-        val ay = event.values[1]
-        val az = event.values[2]
-
-        // Separate gravity using low-pass filter
-        gravity[0] = LOW_PASS_ALPHA * gravity[0] + (1 - LOW_PASS_ALPHA) * ax
-        gravity[1] = LOW_PASS_ALPHA * gravity[1] + (1 - LOW_PASS_ALPHA) * ay
-        gravity[2] = LOW_PASS_ALPHA * gravity[2] + (1 - LOW_PASS_ALPHA) * az
-
-        // Linear acceleration (gravity removed)
-        val linX = ax - gravity[0]
-        val linY = ay - gravity[1]
-        val linZ = az - gravity[2]
-
-        // Total linear acceleration magnitude
-        val magnitude = sqrt(linX * linX + linY * linY + linZ * linZ)
-
-        // Twist detection is handled entirely by gyroscope; accelerometer unused here
+private fun handleAccelerometer(event: SensorEvent) {
+        // Accelerometer not used for twist detection; gyroscope handles all motion
     }
 
     private fun handleGyroscope(event: SensorEvent) {
