@@ -4,7 +4,141 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!--
+        Adaptive icon foreground — safe zone is the inner 72×72dp centered at (54,54).
+        All meaningful content kept within x:[18,90] y:[18,90].
+
+        Layers (bottom to top):
+          1. Light beam cone  — wide triangular glow spreading upward
+          2. Beam core        — bright narrow center ray
+          3. Phone body       — rounded rectangle, portrait
+          4. Phone screen     — lighter inset rectangle
+          5. Camera bump      — small circle top-center of phone
+          6. Flashlight LED   — bright dot on camera bump
+          7. Lens ring        — stroke circle around LED
+    -->
+
+    <!-- ── 1. Outer beam cone (wide, soft, low opacity) ───────────────── -->
+    <!-- Wide trapezoidal glow: apex at phone top-center, fans out upward -->
     <path
-        android:fillColor="#FFFFCC00"
-        android:pathData="M54,20 L42,52 L50,52 L44,88 L70,46 L60,46 Z" />
+        android:fillColor="#55FFE066"
+        android:pathData="
+            M54,34
+            L22,18
+            L18,18
+            L18,14
+            L90,14
+            L90,18
+            L86,18
+            L54,34
+            Z" />
+
+    <!-- ── 2. Medium beam layer (slightly narrower, more opaque) ──────── -->
+    <path
+        android:fillColor="#88FFDD44"
+        android:pathData="
+            M54,34
+            L28,18
+            L80,18
+            Z" />
+
+    <!-- ── 3. Beam core (bright central ray) ─────────────────────────── -->
+    <path
+        android:fillColor="#EEFFF0AA"
+        android:pathData="
+            M54,34
+            L44,18
+            L64,18
+            Z" />
+
+    <!-- ── 4. Phone body (rounded rect, portrait orientation) ─────────── -->
+    <!-- Body: x=36, y=34, width=36, height=62, cornerRadius≈5 via cubic -->
+    <path
+        android:fillColor="#FF1E2733"
+        android:pathData="
+            M41,34
+            L67,34
+            Q72,34 72,39
+            L72,91
+            Q72,96 67,96
+            L41,96
+            Q36,96 36,91
+            L36,39
+            Q36,34 41,34
+            Z" />
+
+    <!-- ── 5. Phone screen (inset, slightly lighter) ──────────────────── -->
+    <path
+        android:fillColor="#FF253040"
+        android:pathData="
+            M39,42
+            L69,42
+            L69,88
+            L39,88
+            Z" />
+
+    <!-- ── 6. Camera module bump (top-center of phone body) ───────────── -->
+    <path
+        android:fillColor="#FF141C26"
+        android:pathData="
+            M54,34
+            m-6,0
+            a6,6 0 1,0 12,0
+            a6,6 0 1,0 -12,0" />
+
+    <!-- ── 7. Flashlight LED — bright white-yellow circle ─────────────── -->
+    <path
+        android:fillColor="#FFFFFF99"
+        android:pathData="
+            M54,34
+            m-2.5,0
+            a2.5,2.5 0 1,0 5,0
+            a2.5,2.5 0 1,0 -5,0" />
+
+    <!-- ── 8. LED outer glow ring (stroke effect via two circles diff) ── -->
+    <path
+        android:fillColor="#66FFE566"
+        android:pathData="
+            M54,34
+            m-4,0
+            a4,4 0 1,0 8,0
+            a4,4 0 1,0 -8,0" />
+    <!-- Punch out center so only ring shows -->
+    <path
+        android:fillColor="#FF141C26"
+        android:pathData="
+            M54,34
+            m-2.8,0
+            a2.8,2.8 0 1,0 5.6,0
+            a2.8,2.8 0 1,0 -5.6,0" />
+
+    <!-- ── 9. LED bright core (top layer) ─────────────────────────────── -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M54,34
+            m-1.8,0
+            a1.8,1.8 0 1,0 3.6,0
+            a1.8,1.8 0 1,0 -3.6,0" />
+
+    <!-- ── 10. Phone screen UI hint — three tiny horizontal bars ──────── -->
+    <!-- Top bar -->
+    <path
+        android:fillColor="#22FFFFFF"
+        android:pathData="M44,50 L64,50 Q65,50 65,51 L65,52 Q65,53 64,53 L44,53 Q43,53 43,52 L43,51 Q43,50 44,50 Z" />
+    <!-- Middle bar -->
+    <path
+        android:fillColor="#18FFFFFF"
+        android:pathData="M44,57 L60,57 Q61,57 61,58 L61,59 Q61,60 60,60 L44,60 Q43,60 43,59 L43,58 Q43,57 44,57 Z" />
+    <!-- Bottom bar -->
+    <path
+        android:fillColor="#14FFFFFF"
+        android:pathData="M44,64 L56,64 Q57,64 57,65 L57,66 Q57,67 56,67 L44,67 Q43,67 43,66 L43,65 Q43,64 44,64 Z" />
+
+    <!-- ── 11. Home indicator pill at phone bottom ─────────────────────── -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M48,91 L60,91 Q61,91 61,92 L61,93 Q61,94 60,94 L48,94 Q47,94 47,93 L47,92 Q47,91 48,91 Z" />
+
 </vector>
