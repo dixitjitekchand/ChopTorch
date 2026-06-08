@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ChopTorch"
+rootProject.name = "FlashlightShake"
 include ':app'
