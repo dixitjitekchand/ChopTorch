@@ -175,6 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:text="Got it!"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             android:backgroundTint="@color/accent_blue"
