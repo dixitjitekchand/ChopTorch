@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        Monochrome layer for Android 13+ themed icons (Material You).
+        Rendered as a single-color silhouette by the system.
+        Uses the same composition as the foreground but as solid white paths
+        with no color — the system tints these automatically.
+        Safe zone: x:[18,90] y:[18,90]
+    -->
+
+    <!-- Beam cone -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M54,34
+            L20,18
+            L88,18
+            Z" />
+
+    <!-- Phone body -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M41,34
+            L67,34
+            Q72,34 72,39
+            L72,91
+            Q72,96 67,96
+            L41,96
+            Q36,96 36,91
+            L36,39
+            Q36,34 41,34
+            Z" />
+
+    <!-- Screen cutout (subtract via background color — system handles tinting) -->
+    <path
+        android:fillColor="#FF0D1117"
+        android:pathData="
+            M39,42
+            L69,42
+            L69,88
+            L39,88
+            Z" />
+
+    <!-- Camera bump -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M54,34
+            m-5,0
+            a5,5 0 1,0 10,0
+            a5,5 0 1,0 -10,0" />
+
+    <!-- LED bright spot -->
+    <path
+        android:fillColor="#FF0D1117"
+        android:pathData="
+            M54,34
+            m-2,0
+            a2,2 0 1,0 4,0
+            a2,2 0 1,0 -4,0" />
+
+    <!-- Home pill -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M48,91 L60,91 Q61,91 61,92.5 Q61,94 60,94 L48,94 Q47,94 47,92.5 Q47,91 48,91 Z" />
+
+</vector>
