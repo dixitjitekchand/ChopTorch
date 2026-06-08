@@ -11,19 +11,18 @@ import kotlin.math.sqrt
 /**
  * ChopGestureDetector
  *
- * Detects a "double-chop" gesture using accelerometer + gyroscope fusion.
+ * Detects a "double wrist-shake" gesture using accelerometer + gyroscope fusion.
  *
  * Gesture definition:
  *   1. Phone is roughly held in portrait or landscape orientation
- *   2. User makes a quick downward/forward wrist chop
- *   3. Immediately reverses direction (upward/backward)
- *   4. The full motion completes within CHOP_WINDOW_MS milliseconds
- *   5. A second chop within DOUBLE_CHOP_WINDOW_MS triggers the event
+ *   2. User makes a quick wrist rotation (yaw) in either direction
+ *   3. A full twist completes within CHOP_WINDOW_MS milliseconds
+ *   4. A second twist within DOUBLE_CHOP_WINDOW_MS triggers the event
  *
  * Sensor fusion:
- *   - Accelerometer detects linear force spikes along Y-axis (chop axis)
- *   - Gyroscope detects rotational velocity to confirm wrist rotation
- *   - Both must exceed thresholds for a valid chop event
+ *   - Gyroscope detects rotational velocity on Z-axis (wrist yaw twist)
+ *   - Accelerometer provides gravity separation for linear motion filtering
+ *   - Both must exceed thresholds for a valid twist event
  */
 class ChopGestureDetector(
     private val sensorManager: SensorManager,
