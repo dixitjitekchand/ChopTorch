@@ -223,10 +223,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startService() {
+    private fun startChopTorchService() {
         val sensitivity = binding.seekbarSensitivity.progress / 100f
-        val intent = Intent(this, Service::class.java).apply {
-            putExtra(Service.EXTRA_SENSITIVITY, sensitivity)
+        val intent = Intent(this, ChopTorchService::class.java).apply {
+            putExtra(ChopTorchService.EXTRA_SENSITIVITY, sensitivity)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -249,9 +249,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun stopService() {
-        val intent = Intent(this, Service::class.java).apply {
-            action = Service.ACTION_STOP
+    private fun stopChopTorchService() {
+        val intent = Intent(this, ChopTorchService::class.java).apply {
+            action = ChopTorchService.ACTION_STOP
         }
         startService(intent)
 
