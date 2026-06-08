@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                 else -> notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         } else {
-            startService()
+            startChopTorchService()
         }
     }
 
