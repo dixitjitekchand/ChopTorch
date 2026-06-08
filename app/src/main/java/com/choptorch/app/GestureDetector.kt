@@ -32,17 +32,19 @@ class ChopGestureDetector(
     companion object {
         private const val TAG = "ChopGestureDetector"
 
-        // Minimum gyroscope Z angular velocity (rad/s) to start a wrist twist.
-        // Lowered from 2.5 — real wrist twist peaks typically reach 6–12 rad/s,
-        // but entry detection should catch the ramp-up early.
-        const val DEFAULT_ACCEL_THRESHOLD = 2.0f
+        // Original working values — do not lower these thresholds.
+        // Entry at 2.5 rad/s catches the ramp-up of a real wrist twist without
+        // triggering on ambient micro-motion or walking vibration.
+        const val DEFAULT_ACCEL_THRESHOLD = 2.5f
 
-        // Minimum gz to confirm reversal. Lowered from 2.0 for same reason.
-        const val DEFAULT_GYRO_THRESHOLD = 1.5f
+        // Reversal confirmation at 2.0 rad/s. Must be high enough that noise
+        // during the CHOP_DOWN coast phase cannot prematurely trigger reversal.
+        const val DEFAULT_GYRO_THRESHOLD = 2.0f
 
-        // Window for one full twist (DOWN + reversal + settle). Extended from
-        // 600 ms — deliberate users need up to ~800 ms for a clean twist.
-        const val CHOP_WINDOW_MS = 800L
+        // 600 ms is the correct window for one full twist cycle.
+        // Extending this to 800 ms allows corrupted partial-twist state to
+        // persist longer and accumulate noise, causing missed double-chops.
+        const val CHOP_WINDOW_MS = 600L
 
         // Window between two twists to register as double-chop. Unchanged.
         const val DOUBLE_CHOP_WINDOW_MS = 1000L
@@ -109,15 +111,16 @@ class ChopGestureDetector(
     }
 
     fun setSensitivity(level: Float) {
+        // Original working sensitivity range.
         // level: 0.0 (slider left = High sensitivity) → 1.0 (slider right = Low sensitivity)
-        // At level=0.0 (High): accel=3.0, gyro=1.2  — triggers on gentle twists
-        // At level=0.5 (Med): accel=5.5, gyro=2.45  — triggers on normal twists
-        // At level=1.0 (Low): accel=8.0, gyro=3.7   — requires firm twists only
-        // Previous range was [6,20]/[1.5,6] — lower bound of 6 was already too
-        // high for reliable detection; new range [3,8]/[1.2,3.7] keeps the full
-        // slider useful and puts the default squarely in the reliable zone.
-        accelThreshold = 3.0f + (level * 5.0f)
-        gyroThreshold = 1.2f + (level * 2.5f)
+        // At level=0.0 (High): accel=6.0,  gyro=1.5  — triggers on gentle twists
+        // At level=0.5 (Med): accel=13.0, gyro=3.75  — triggers on normal twists
+        // At level=1.0 (Low): accel=20.0, gyro=6.0   — requires firm twists only
+        // The [3,8]/[1.2,3.7] range made the entire slider too hair-triggered —
+        // even "Low" sensitivity was too responsive, causing false positives from
+        // walking, pocket movement, and natural hand motion.
+        accelThreshold = 6.0f + (level * 14.0f)
+        gyroThreshold = 1.5f + (level * 4.5f)
         Log.d(TAG, "Sensitivity updated: level=$level accel=$accelThreshold gyro=$gyroThreshold")
     }
 
@@ -182,12 +185,14 @@ private fun handleAccelerometer(event: SensorEvent) {
                 val elapsed = nowMs - chopPhaseStartMs
                 if (elapsed > CHOP_WINDOW_MS) { resetState(clearChopTimestamp = true); return }
 
-                // Twist complete when gz settles below 15% of entry threshold.
-                // Previous multiplier was 0.4 — at accelThreshold=13 that required
-                // gz to drop below 5.2 rad/s, which often never happens cleanly
-                // within the window. 0.15 gives a realistic settle target of ~0.75
-                // at default sensitivity, matching real deceleration curves.
-                if (abs(gz) < accelThreshold * 0.15f) {
+                // Twist complete when gz settles below 40% of entry threshold.
+                // At default sensitivity accelThreshold≈5.5, this requires gz < 2.2 rad/s —
+                // a realistic deceleration target reached naturally at the end of a wrist twist.
+                // The 0.15 multiplier lowered this to ~0.83 rad/s which requires the wrist
+                // to almost fully stop before completing, causing CHOP_UP to time out at
+                // CHOP_WINDOW_MS, triggering resetState(clearChopTimestamp=true), wiping the
+                // inter-chop timestamp, and making double-chop detection impossible.
+                if (abs(gz) < accelThreshold * 0.4f) {
                     Log.v(TAG, "TWIST_1 complete at ${elapsed}ms")
                     onSingleChopCompleted(nowMs)
                 }
