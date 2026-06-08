@@ -32,7 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ChopTorch"
+                android:text="Flashlight Shake"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Double-chop to toggle flashlight"
+                android:text="Shake to toggle flashlight"
                 android:textSize="14sp"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -217,7 +217,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Battery optimization may kill the service. Tap below to disable it for ChopTorch."
+                    android:text="Battery optimization may kill the service. Tap below to disable it for Flashlight Shake."
                     android:textSize="14sp"
                     android:textColor="@color/warning_text"
                     android:layout_marginTop="6dp" />
@@ -251,7 +251,7 @@
             android:id="@+id/btnHowTo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="How to use ChopTorch"
+            android:text="How to use Flashlight Shake"
             android:textSize="15sp"
             android:textColor="@color/accent_blue"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -327,7 +327,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ChopTorch v1.0 • Works screen-off • API 29+"
+            android:text="Flashlight Shake v1.1 • Works screen-off"
             android:textSize="11sp"
             android:textColor="@color/text_secondary"
             android:gravity="center"
