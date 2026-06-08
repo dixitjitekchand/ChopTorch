@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
 
     <!-- Hardware features (not required, app works without them) -->
     <uses-feature
