@@ -47,7 +47,7 @@ class ChopTorchService : LifecycleService() {
         const val EXTRA_FLASH_STATE = "flash_state"
 
         // WakeLock tag
-        private const val WAKE_LOCK_TAG = "ChopTorch:SensorWakeLock"
+        private const val WAKE_LOCK_TAG = "FlashlightShake:SensorWakeLock"
     }
 
     private lateinit var gestureDetector: ChopGestureDetector
