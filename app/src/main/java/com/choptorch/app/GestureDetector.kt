@@ -34,19 +34,17 @@ class ChopGestureDetector(
         private const val TAG = "ChopGestureDetector"
 
         // ── Sensitivity Constants (tune these) ─────────────────────────────
-        // Minimum linear acceleration (m/s²) to consider a chop motion.
-        // Lower = more sensitive (more false positives)
-        // Higher = less sensitive (requires harder chops)
-        const val DEFAULT_ACCEL_THRESHOLD = 12.0f      // m/s²
+        // Minimum gyroscope Z angular velocity (rad/s) to start a twist
+        const val DEFAULT_ACCEL_THRESHOLD = 2.5f       // repurposed as gz entry threshold
 
-        // Minimum gyroscope angular velocity (rad/s) to confirm wrist rotation
-        const val DEFAULT_GYRO_THRESHOLD = 3.0f        // rad/s
+        // Minimum gz magnitude to confirm direction reversal
+        const val DEFAULT_GYRO_THRESHOLD = 2.0f        // rad/s
 
-        // Maximum time (ms) a single chop motion can take (down + reverse)
+        // Maximum time (ms) for one full twist (left→right or right→left)
         const val CHOP_WINDOW_MS = 600L
 
-        // Maximum time (ms) between two chops to count as a "double chop"
-        const val DOUBLE_CHOP_WINDOW_MS = 1200L
+        // Maximum time (ms) between two twists to count as a "double twist"
+        const val DOUBLE_CHOP_WINDOW_MS = 1000L
 
         // Minimum time (ms) between two full double-chop events (debounce)
         const val DEBOUNCE_MS = 800L
@@ -153,85 +151,53 @@ class ChopGestureDetector(
         // Total linear acceleration magnitude
         val magnitude = sqrt(linX * linX + linY * linY + linZ * linZ)
 
-        // Primary chop axis: Y-axis (device held portrait, chopping down)
-        // Also check Z-axis for landscape-held devices
-        val chopAxis = maxOf(abs(linY), abs(linZ))
-
-        processChopMotion(chopAxis, magnitude, linY)
+        // Twist detection is handled entirely by gyroscope; accelerometer unused here
     }
 
     private fun handleGyroscope(event: SensorEvent) {
-        val gx = event.values[0]
-        val gy = event.values[1]
-        val gz = event.values[2]
-
-        lastGyroMagnitude = sqrt(gx * gx + gy * gy + gz * gz)
-
-        // Confirm gyro rotation during active chop phase
-        if (chopPhase != ChopPhase.IDLE && lastGyroMagnitude >= gyroThreshold) {
-            gyroConfirmed = true
-        }
+        val gz = event.values[2]  // Z-axis = wrist yaw (twist)
+        lastGyroMagnitude = abs(gz)
+        processTwistMotion(gz)
     }
 
-    private fun processChopMotion(chopAxis: Float, magnitude: Float, linY: Float) {
+    // Sign of the first twist direction (+1 or -1)
+    private var firstTwistSign = 0
+
+    private fun processTwistMotion(gz: Float) {
         val nowMs = System.currentTimeMillis()
 
         when (chopPhase) {
 
             ChopPhase.IDLE -> {
-                // Look for initial chop impulse exceeding threshold
-                if (chopAxis >= accelThreshold) {
+                if (abs(gz) >= accelThreshold) {
                     chopPhase = ChopPhase.CHOP_DOWN
                     chopPhaseStartMs = nowMs
-                    gyroConfirmed = hasGyroscope.not() // If no gyro, skip gyro check
-                    Log.v(TAG, "CHOP_DOWN detected: chopAxis=$chopAxis")
+                    firstTwistSign = if (gz > 0) 1 else -1
+                    Log.v(TAG, "TWIST_1 started: gz=$gz")
                 }
             }
 
             ChopPhase.CHOP_DOWN -> {
                 val elapsed = nowMs - chopPhaseStartMs
+                if (elapsed > CHOP_WINDOW_MS) { resetState(); return }
 
-                // Timeout — reset if motion took too long
-                if (elapsed > CHOP_WINDOW_MS) {
-                    Log.v(TAG, "CHOP_DOWN timed out")
-                    resetState()
-                    return
-                }
-
-                // Update gyro confirmation in this window
-                if (lastGyroMagnitude >= gyroThreshold) {
-                    gyroConfirmed = true
-                }
-
-                // Look for reversal: magnitude drops then spikes opposite direction,
-                // or simply just drops below threshold and then rises again
-                if (chopAxis >= accelThreshold && elapsed > 50L) {
-                    // Check if this is a reversal (sign change on primary axis)
+                // Wait for reversal: gz crosses zero and exceeds threshold in opposite direction
+                val reversing = (firstTwistSign > 0 && gz <= -gyroThreshold) ||
+                                (firstTwistSign < 0 && gz >= gyroThreshold)
+                if (reversing && elapsed > 60L) {
                     chopPhase = ChopPhase.CHOP_UP
-                    Log.v(TAG, "CHOP_UP phase: elapsed=${elapsed}ms gyroOk=$gyroConfirmed")
+                    Log.v(TAG, "TWIST_reversal at ${elapsed}ms")
                 }
             }
 
             ChopPhase.CHOP_UP -> {
                 val elapsed = nowMs - chopPhaseStartMs
+                if (elapsed > CHOP_WINDOW_MS) { resetState(); return }
 
-                if (elapsed > CHOP_WINDOW_MS) {
-                    Log.v(TAG, "CHOP_UP timed out")
-                    resetState()
-                    return
-                }
-
-                // Chop completed when magnitude drops below threshold
-                if (magnitude < accelThreshold * 0.5f) {
-                    // Require gyro confirmation if gyroscope is available
-                    val gyroOk = !hasGyroscope || gyroConfirmed
-
-                    if (gyroOk) {
-                        onSingleChopCompleted(nowMs)
-                    } else {
-                        Log.v(TAG, "Chop rejected: insufficient wrist rotation")
-                        resetState()
-                    }
+                // Twist complete when gz settles near zero
+                if (abs(gz) < accelThreshold * 0.4f) {
+                    Log.v(TAG, "TWIST_1 complete at ${elapsed}ms")
+                    onSingleChopCompleted(nowMs)
                 }
             }
         }
@@ -268,5 +234,6 @@ class ChopGestureDetector(
         chopPhaseStartMs = 0L
         gyroConfirmed = false
         lastGyroMagnitude = 0f
+        firstTwistSign = 0
     }
 }
