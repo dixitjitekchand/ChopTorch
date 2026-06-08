@@ -17,7 +17,7 @@ class BootReceiver : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "BootReceiver"
-        const val PREFS_NAME = "choptorch_prefs"
+        const val PREFS_NAME = "flashlight_shake_prefs"
         const val KEY_SERVICE_ENABLED = "service_enabled"
         const val KEY_SENSITIVITY = "sensitivity"
     }
